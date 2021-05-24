@@ -20,6 +20,8 @@ public class Product {
 
 	private BigDecimal price;
 
+	private String photo;
+
 	public Long getId() {
 		return id;
 	}
@@ -42,6 +44,14 @@ public class Product {
 
 	public void setPrice(BigDecimal price) {
 		this.price = price;
+	}
+
+	public String getPhoto() {
+		return photo;
+	}
+
+	public void setPhoto(String photo) {
+		this.photo = photo;
 	}
 
 }

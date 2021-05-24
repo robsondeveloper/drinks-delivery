@@ -2,5 +2,6 @@ CREATE TABLE product (
     id SERIAL PRIMARY KEY,
     name CHARACTER VARYING(128) NOT NULL,
     price DECIMAL(8,2) NOT NULL,
+    photo CHARACTER VARYING(128),
     UNIQUE (name)
 );

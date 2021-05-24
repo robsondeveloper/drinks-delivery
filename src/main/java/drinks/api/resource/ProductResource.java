@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import drinks.api.contract.request.ProductRequest;
 import drinks.api.contract.response.ProductResponse;
@@ -54,6 +56,11 @@ public class ProductResource {
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void delete(@PathVariable Long id) {
 		service.delete(id);
+	}
+
+	@PutMapping(path = "/{id}/photo")
+	public void uploadPhoto(@PathVariable Long id, @RequestParam("file") MultipartFile file) {
+		service.uploadPhoto(id, file);
 	}
 
 }
