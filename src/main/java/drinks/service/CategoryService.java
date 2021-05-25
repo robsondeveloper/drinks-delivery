@@ -37,10 +37,10 @@ public class CategoryService {
 
 	@Transactional
 	public CategoryResponse create(CategoryRequest request) {
-		var category = modelMapper.map(request, Category.class);
 		if (repository.existsByName(request.getName())) {
 			throw new IllegalArgumentException("Nome já existente!");
 		}
+		var category = modelMapper.map(request, Category.class);
 		category.setCode(generateCode(category.getName()));
 		return toResponse(repository.save(category));
 	}
@@ -48,10 +48,10 @@ public class CategoryService {
 	@Transactional
 	public CategoryResponse update(Long id, CategoryRequest request) {
 		var category = findBy(id);
-		modelMapper.map(request, category);
-		if (repository.existsByNameAndIdNot(request.getName(), category.getId())) {
+		if (repository.existsByNameAndIdNot(request.getName(), id)) {
 			throw new IllegalArgumentException("Nome já existente!");
 		}
+		modelMapper.map(request, category);
 		category.setCode(generateCode(category.getName()));
 		return toResponse(repository.save(category));
 	}
