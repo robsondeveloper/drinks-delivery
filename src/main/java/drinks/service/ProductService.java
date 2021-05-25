@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import drinks.api.contract.request.ProductRequest;
 import drinks.api.contract.response.ProductResponse;
 import drinks.domain.model.Product;
+import drinks.domain.repository.CategoryRepository;
 import drinks.domain.repository.ProductRepository;
 import drinks.exception.FileException;
 import drinks.exception.ResourceNotFoundException;
@@ -24,12 +25,14 @@ public class ProductService {
 	private final ProductRepository repository;
 	private final ModelMapper modelMapper;
 	private final PhotoStorageService photoStorageService;
+	private final CategoryRepository categoryRepository;
 
 	public ProductService(ProductRepository repository, ModelMapper modelMapper,
-			PhotoStorageService photoStorageService) {
+			PhotoStorageService photoStorageService, CategoryRepository categoryRepository) {
 		this.repository = repository;
 		this.modelMapper = modelMapper;
 		this.photoStorageService = photoStorageService;
+		this.categoryRepository = categoryRepository;
 	}
 
 	public List<ProductResponse> findAll() {
@@ -43,20 +46,23 @@ public class ProductService {
 
 	@Transactional
 	public ProductResponse create(ProductRequest request) {
-		var product = modelMapper.map(request, Product.class);
+		validateCategory(request.getCategory().getId());
 		if (repository.existsByName(request.getName())) {
 			throw new IllegalArgumentException("Nome já existente!");
 		}
+		var product = modelMapper.map(request, Product.class);
 		return toResponse(repository.save(product));
 	}
 
 	@Transactional
 	public ProductResponse update(Long id, ProductRequest request) {
-		var product = findBy(id);
-		modelMapper.map(request, product);
-		if (repository.existsByNameAndIdNot(request.getName(), product.getId())) {
+		validateCategory(request.getCategory().getId());
+		if (repository.existsByNameAndIdNot(request.getName(), id)) {
 			throw new IllegalArgumentException("Nome já existente!");
 		}
+		var product = findBy(id);
+		product.setCategory(null);
+		modelMapper.map(request, product);
 		return toResponse(repository.save(product));
 	}
 
@@ -84,6 +90,12 @@ public class ProductService {
 
 	private ProductResponse toResponse(Product product) {
 		return modelMapper.map(product, ProductResponse.class);
+	}
+
+	private void validateCategory(Long id) {
+		if (!categoryRepository.existsById(id)) {
+			throw new ResourceNotFoundException("Categoria não existente!");
+		}
 	}
 
 }
