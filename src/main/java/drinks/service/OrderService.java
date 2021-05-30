@@ -1,6 +1,5 @@
 package drinks.service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -51,7 +50,6 @@ public class OrderService {
 		});
 		order.calculateTotal();
 		order.setStatus(OrderStatus.CREATED);
-		order.setCreatedAt(LocalDateTime.now());
 		return toResponse(repository.save(order));
 	}
 

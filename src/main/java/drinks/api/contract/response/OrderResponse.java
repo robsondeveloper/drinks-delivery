@@ -1,7 +1,7 @@
 package drinks.api.contract.response;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -15,7 +15,7 @@ public class OrderResponse {
 	private OrderStatus status;
 
 	@JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
-	private LocalDateTime createdAt;
+	private OffsetDateTime createdAt;
 
 	private List<OrderItemResponse> items;
 
@@ -35,11 +35,11 @@ public class OrderResponse {
 		this.status = status;
 	}
 
-	public LocalDateTime getCreatedAt() {
+	public OffsetDateTime getCreatedAt() {
 		return createdAt;
 	}
 
-	public void setCreatedAt(LocalDateTime createdAt) {
+	public void setCreatedAt(OffsetDateTime createdAt) {
 		this.createdAt = createdAt;
 	}
 
